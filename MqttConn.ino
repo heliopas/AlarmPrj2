@@ -119,13 +119,58 @@ void callback(char *topic, byte *payload, unsigned int length) {
     Serial.print("Message arrived in topic: ");
     Serial.println(topic);
     Serial.print("Message:");
+    String input = "";
     for (int i = 0; i < length; i++) {
         Serial.print((char) payload[i]);
+        input += (char)payload[i];
     }
-
     blinkLed(50, 0);
     Serial.println();
     Serial.println("-----------------------");
+
+    if(input == "101")
+    {
+      Serial.println("Set relay 1 to HIGH");
+      digitalWrite(rele1, HIGH);
+    }if(input == "100")
+    {
+      Serial.println("Set relay 1 to LOW");
+      digitalWrite(rele1, LOW);
+    }if(input == "201")
+    {
+      Serial.println("Set relay 2 to HIGH");
+      digitalWrite(rele2, HIGH);
+    }if(input == "200")
+    {
+      Serial.println("Set relay 2 to LOW");
+      digitalWrite(rele2, LOW);
+    }if(input == "301")
+    {
+      Serial.println("Set relay 3 to HIGH");
+      digitalWrite(rele3, HIGH);
+    }if(input == "300")
+    {
+      Serial.println("Set relay 3 to LOW");
+      digitalWrite(rele3, LOW);
+    }if(input == "401")
+    {
+      Serial.println("Set relay 4 to HIGH");
+      digitalWrite(rele4, HIGH);
+    }if(input == "400")
+    {
+      Serial.println("Set relay 4 to LOW");
+      digitalWrite(rele4, LOW);
+    }if(input == "501")
+    {
+      Serial.println("Set buzzer HIGH");
+      digitalWrite(buzzer, HIGH);
+    }if(input == "500")
+    {
+      Serial.println("Set buzzer to LOW");
+      digitalWrite(buzzer, LOW);
+    }
+
+client.disconnect();
     
 }
 
@@ -141,5 +186,7 @@ client.loop();
 
 client.subscribe(topic);
 //client.publish(topic, "MSG received");
+
+blinkLed(500, 0);
 
 }
