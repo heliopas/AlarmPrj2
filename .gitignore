@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/Main_ino/MqttConn/config.h

@@ -1,14 +1,15 @@
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
-#include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <time.h>
+#include "config.h"
 
-const char* ssid = "apto157_mi";
-const char* password = "Dilermando";
-const char* mqtt_Broker = "broker.emqx.io";
-const char* mqtt_user = "hpr";
-const char* mqtt_passwd = "10203045";
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWD;
+const char* mqtt_Broker = MQTT_Broker;
+const char* mqtt_user = MQTT_USER;
+const char* mqtt_passwd = MQTT_PASSWD;
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
