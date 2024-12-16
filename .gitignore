@@ -14,3 +14,4 @@
 .cxx
 local.properties
 /Main_ino/MqttConn/config.h
+/pyMqttConnect/files/var/globalVar.py
