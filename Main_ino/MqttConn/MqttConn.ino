@@ -171,7 +171,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
       digitalWrite(buzzer, LOW);
     }
 
-//client.disconnect();
+client.disconnect();
     
 }
 
