@@ -16,14 +16,14 @@ PubSubClient client(espClient);
 const char *topic = "tst/esp32";
 
 //Var global
-float h;  
-float t;
 int ledPin = 2; 
 int rele1 = 14;
 int rele2 = 12;
 int rele3 = 13;
 int rele4 = 15;
 int buzzer = 0;
+
+unsigned long milliStart = millis();       
 
 
 void setup() {
@@ -171,7 +171,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
       digitalWrite(buzzer, LOW);
     }
 
-client.disconnect();
+//client.disconnect();
     
 }
 
@@ -186,7 +186,8 @@ if(!client.connected())
 client.loop();
 
 client.subscribe(topic);
-//client.publish(topic, "MSG received");
+
+if((millis() - milliStart)>20000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
 
 blinkLed(500, 0);
 
