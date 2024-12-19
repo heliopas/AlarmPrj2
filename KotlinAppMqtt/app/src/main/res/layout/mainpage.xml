@@ -15,15 +15,52 @@
         tools:context=".MainActivity">
 
         <Button
-            android:id="@+id/BotSalvar"
+            android:id="@+id/MqttConnect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="Salvar"
+            android:text="MqttConnect"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="1" />
+
+        <Button
+            android:id="@+id/OpenRelay1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="OpenRelay1"
+            app:layout_constraintEnd_toEndOf="@id/MqttConnect"
+            app:layout_constraintStart_toStartOf="@id/MqttConnect"
+            app:layout_constraintTop_toBottomOf="@id/MqttConnect"
+            app:layout_constraintVertical_bias="1" />
+
+        <Button
+            android:id="@+id/OpenRelay2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="OpenRelay2"
+            app:layout_constraintEnd_toEndOf="@id/OpenRelay1"
+            app:layout_constraintStart_toStartOf="@id/OpenRelay1"
+            app:layout_constraintTop_toBottomOf="@id/OpenRelay1"
+            app:layout_constraintVertical_bias="1" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+
+            android:text="Terminal"
+
+
+            app:layout_constraintEnd_toEndOf="@id/OpenRelay2"
+            app:layout_constraintStart_toStartOf="@id/OpenRelay2"
+            app:layout_constraintTop_toBottomOf="@id/OpenRelay2"
+
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

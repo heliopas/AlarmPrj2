@@ -1,0 +1,1 @@
+19/12/2024 - Corrigido bug Appcompact Activity
