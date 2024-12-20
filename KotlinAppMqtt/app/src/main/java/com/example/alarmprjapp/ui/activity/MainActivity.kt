@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         val options = MqttConnectOptions()
 
+        options.password = "10203045".toCharArray()
+
         try {
             mqttClient.connect(options, null, object : IMqttActionListener{
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -85,6 +87,26 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
     }
 
+    fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
+        try {
+            val message = MqttMessage()
+            message.payload = msg.toByteArray()
+            message.qos = qos
+            message.isRetained = retained
+            mqttClient.publish(topic, message, null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.d(TAG, "$msg published to $topic")
+                }
+
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                    Log.d(TAG, "Failed to publish $msg to $topic")
+                }
+            })
+        } catch (e: MqttException) {
+            e.printStackTrace()
+        }
+    }
+
     @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?)  {
         super.onCreate(savedInstanceState)
@@ -97,6 +119,27 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             connect(context = this)
 
         }
+
+        val openRelay1 = findViewById<Button>(R.id.OpenRelay1)
+        openRelay1.setOnClickListener {
+            Log.i(TAG, "Relay 1 connect command clicked!!!!")
+
+            publish("tst/esp32", "101")
+
+        }
+
+        val closeRelay1 = findViewById<Button>(R.id.CloseRelay1)
+        closeRelay1.setOnClickListener {
+
+            Log.i(TAG, "Relay 1 close command clicked!!!!")
+
+            publish("tst/esp32", "100")
+        }
+
+
+
+
+
 
     }
 
