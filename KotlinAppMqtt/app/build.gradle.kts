@@ -61,4 +61,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.org.eclipse.paho.client.mqttv3)
     implementation(libs.org.eclipse.paho.android.service)
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 }

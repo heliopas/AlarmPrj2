@@ -1,0 +1,1 @@
+23/12/24 - Corrigido função para conexão com MQTT, adicionado endereço de novo broker

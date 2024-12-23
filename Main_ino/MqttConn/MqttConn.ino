@@ -87,6 +87,9 @@ void WifiConnect()
 
 void blinkLed(int time, int blinkTime)
 {
+
+   //unsigned long milliStart = time * 1000;
+
    while(blinkTime>=0)
    {
       digitalWrite(ledPin, LOW);
@@ -99,10 +102,12 @@ void blinkLed(int time, int blinkTime)
 
 
 void mqttConnect(){
-  
-  String mqtt_ClientID = "hpterm-client-";
 
   while (!client.connected()) {
+
+        String mqtt_ClientID = "";
+        mqtt_ClientID = "hpterm-client-";
+
         Serial.print("*");        
         mqtt_ClientID += String(WiFi.macAddress());
         Serial.printf("The client %s connects to the public MQTT broker\n", mqtt_ClientID.c_str());
@@ -187,8 +192,8 @@ client.loop();
 
 client.subscribe(topic);
 
-if((millis() - milliStart)>20000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
+if((millis() - milliStart)>40000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
 
-blinkLed(500, 0);
+//blinkLed(500, 0);
 
 }

@@ -45,8 +45,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
     fun connect(context: Context)
     {
 
-        val serverMqtt = "broker.emqx.io"
+        //val serverMqtt = "broker.emqx.io"
+
+        val serverMqtt = "tcp://broker.hivemq.com"
+
         mqttClient = MqttAndroidClient(context, serverMqtt, "hpr")
+
 
         mqttClient.setCallback(object : MqttCallback{
 
@@ -67,6 +71,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         val options = MqttConnectOptions()
 
         options.password = "10203045".toCharArray()
+        options.userName = "hpterm-client-94:B9:7E:17:A3:00"
 
         try {
             mqttClient.connect(options, null, object : IMqttActionListener{
@@ -75,11 +80,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                    Log.d(TAG, "Connection failure")
+                    Log.d(TAG, "Connection failure", exception)
                 }
             })
         }catch (e : MqttException){
             e.printStackTrace()
+            Log.d(TAG, "Connection error!!!", e)
 
         }
 
@@ -124,7 +130,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay1.setOnClickListener {
             Log.i(TAG, "Relay 1 connect command clicked!!!!")
 
-            publish("tst/esp32", "101")
+            publish("tst/esp32", "501")
 
         }
 
@@ -133,7 +139,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Relay 1 close command clicked!!!!")
 
-            publish("tst/esp32", "100")
+            publish("tst/esp32", "500")
         }
 
 
