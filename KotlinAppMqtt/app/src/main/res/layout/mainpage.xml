@@ -47,14 +47,48 @@
             app:layout_constraintTop_toBottomOf="@id/OpenRelay1"
             app:layout_constraintVertical_bias="1" />
 
+        <Button
+            android:id="@+id/OpenRelay2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="OpenRelay2"
+            app:layout_constraintEnd_toEndOf="@id/CloseRelay1"
+            app:layout_constraintStart_toStartOf="@id/CloseRelay1"
+            app:layout_constraintTop_toBottomOf="@id/CloseRelay1"
+            app:layout_constraintVertical_bias="1" />
+
+        <Button
+            android:id="@+id/CloseRelay2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="CloseRelay2"
+            app:layout_constraintEnd_toEndOf="@id/OpenRelay2"
+            app:layout_constraintStart_toStartOf="@id/OpenRelay2"
+            app:layout_constraintTop_toBottomOf="@id/OpenRelay2"
+            app:layout_constraintVertical_bias="1" />
+
+        <Button
+            android:id="@+id/MqttDisconnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="MQTTDISCONNECT"
+            app:layout_constraintEnd_toEndOf="@id/CloseRelay2"
+            app:layout_constraintStart_toStartOf="@id/CloseRelay2"
+            app:layout_constraintTop_toBottomOf="@id/CloseRelay2"
+            app:layout_constraintVertical_bias="1" />
+
         <EditText
+            android:id="@+id/terminal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="Terminal"
-            app:layout_constraintEnd_toEndOf="@id/CloseRelay1"
-            app:layout_constraintStart_toStartOf="@id/CloseRelay1"
-            app:layout_constraintTop_toBottomOf="@id/CloseRelay1"/>
+            app:layout_constraintEnd_toEndOf="@id/MqttDisconnect"
+            app:layout_constraintStart_toStartOf="@id/MqttDisconnect"
+            app:layout_constraintTop_toBottomOf="@id/MqttDisconnect"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

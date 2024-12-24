@@ -7,6 +7,7 @@ import android.service.controls.actions.FloatAction
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -47,15 +48,15 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         //val serverMqtt = "broker.emqx.io"
 
-        val serverMqtt = "tcp://broker.hivemq.com"
+        val serverMqtt = "tcp://broker.hivemq.com:1883"
 
-        mqttClient = MqttAndroidClient(context, serverMqtt, "hpr")
-
+        mqttClient = MqttAndroidClient(context, serverMqtt, "AndroidAlarm")
 
         mqttClient.setCallback(object : MqttCallback{
 
             override fun messageArrived(topic: String?, message: MqttMessage?) {
                 Log.d(TAG, "Receive message: ${message.toString()} from topic: $topic")
+
             }
 
             override fun connectionLost(cause: Throwable?) {
@@ -63,10 +64,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                Log.d(TAG, "        Message delivered successfully!!")
 
             }
 
         })
+
 
         val options = MqttConnectOptions()
 
@@ -77,10 +80,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             mqttClient.connect(options, null, object : IMqttActionListener{
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.d(TAG, "Connection success")
+                    printConsole("Connection success")
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                     Log.d(TAG, "Connection failure", exception)
+                    printConsole("Connection failure")
                 }
             })
         }catch (e : MqttException){
@@ -102,15 +107,48 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             mqttClient.publish(topic, message, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.d(TAG, "$msg published to $topic")
+                    printConsole("$msg published to $topic")
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                     Log.d(TAG, "Failed to publish $msg to $topic")
+                    printConsole("Failed to publish $msg to $topic")
                 }
             })
         } catch (e: MqttException) {
             e.printStackTrace()
         }
+    }
+
+    fun disconnect() {
+
+        try {
+
+            mqttClient.disconnect(null, object : IMqttActionListener{
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.d(TAG, "Client disconnection success!!")
+                    printConsole("Client disconnection success!!")
+                }
+
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                    Log.e(TAG, "Client disconnection failed!!")
+                    printConsole("Client disconnection failed!!")
+                }
+            })
+
+        }catch (e : MqttException){
+            e.printStackTrace()
+            Log.d(TAG, "Disconnection error!!!", e)
+        }
+
+
+    }
+
+    fun printConsole( topic: String ){
+
+        val console = findViewById<EditText>(R.id.terminal)
+        console.setText(topic)
+
     }
 
     @SuppressLint("WrongViewCast", "MissingInflatedId")
@@ -121,7 +159,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         val mqttConnect = findViewById<Button>(R.id.MqttConnect)
         mqttConnect.setOnClickListener {
             Log.i(TAG, "Mqtt connect pressed!!!!")
-
             connect(context = this)
 
         }
@@ -130,7 +167,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay1.setOnClickListener {
             Log.i(TAG, "Relay 1 connect command clicked!!!!")
 
-            publish("tst/esp32", "501")
+            publish("tst/esp32", "101")
 
         }
 
@@ -139,7 +176,31 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Relay 1 close command clicked!!!!")
 
+            publish("tst/esp32", "100")
+        }
+
+        val openRelay2 = findViewById<Button>(R.id.OpenRelay2)
+        openRelay2.setOnClickListener {
+            Log.i(TAG, "Buzzer on command clicked!!!!")
+
+            publish("tst/esp32", "501")
+
+        }
+
+        val closeRelay2 = findViewById<Button>(R.id.CloseRelay2)
+        closeRelay2.setOnClickListener {
+
+            Log.i(TAG, "Buzzer off command clicked!!!!")
+
             publish("tst/esp32", "500")
+
+        }
+
+        val mqttClose = findViewById<Button>(R.id.MqttDisconnect)
+        mqttClose.setOnClickListener {
+
+            Log.i(TAG, "Client disconnected!!!!")
+            disconnect()
         }
 
 

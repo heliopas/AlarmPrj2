@@ -25,6 +25,7 @@ Interface para acionamento para alarme usando Mqtt
                Inserido função para connect and publish
                Corrigir, ainda app não se conecta a Mqtt
 - 23/12/2024 - Função connect funcionando.Iniciando debug função callback
+- 24/12/2024 - Adicionado lógica para imprimir texto terminal console app, função callback em debug
 
 ## Exemplos
 

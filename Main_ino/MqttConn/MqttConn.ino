@@ -192,7 +192,7 @@ client.loop();
 
 client.subscribe(topic);
 
-if((millis() - milliStart)>40000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
+if((millis() - milliStart)>20000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
 
 //blinkLed(500, 0);
 
