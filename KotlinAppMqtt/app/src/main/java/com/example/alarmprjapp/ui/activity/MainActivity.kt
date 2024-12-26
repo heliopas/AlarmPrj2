@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         options.password = "10203045".toCharArray()
         options.userName = "hpterm-client-94:B9:7E:17:A3:00"
+        options.connectionTimeout = 40
 
         try {
             mqttClient.connect(options, null, object : IMqttActionListener{
@@ -87,13 +88,13 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
                     Log.d(TAG, "Connection failure", exception)
                     printConsole("Connection failure")
                 }
+
             })
         }catch (e : MqttException){
             e.printStackTrace()
             Log.d(TAG, "Connection error!!!", e)
 
         }
-
 
 
     }
