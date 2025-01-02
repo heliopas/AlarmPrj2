@@ -1,5 +1,6 @@
 package com.example.alarmprjapp
 
+import android.adservices.topics.Topic
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -32,6 +33,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import org.eclipse.paho.client.mqttv3.MqttTopic
 
 class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
@@ -42,9 +44,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         const val TAG = "AndroidMqttClient"
     }
 
-
-    fun connect(context: Context)
-    {
+    fun connect(context: Context){
 
         //val serverMqtt = "broker.emqx.io"
 
@@ -52,10 +52,49 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         mqttClient = MqttAndroidClient(context, serverMqtt, "AndroidAlarm")
 
-        mqttClient.setCallback(object : MqttCallback{
+        val options = MqttConnectOptions()
 
-            override fun messageArrived(topic: String?, message: MqttMessage?) {
-                Log.d(TAG, "Receive message: ${message.toString()} from topic: $topic")
+        //options.password = "10203045".toCharArray()
+        //options.userName = "hpterm-client-94:B9:7E:17:A3:00"
+        options.connectionTimeout = 40
+        options.isCleanSession = true
+        options.isAutomaticReconnect = true
+
+
+        try {
+            mqttClient.connect(options, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.d(TAG, "Connection success")
+                    printConsole("Connection success")
+
+
+                }
+
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                    Log.d(TAG, "Connection failure", exception)
+                    printConsole("Connection failure")
+                }
+
+            })
+        } catch (e: MqttException) {
+            e.printStackTrace()
+            Log.d(TAG, "Connection error!!!", e)
+
+        }
+
+        mqttClient.setCallback(object : MqttCallback {
+
+            override fun messageArrived(topic: String, message: MqttMessage) {
+                Thread{
+                    Log.d(TAG, "Receive message: ${String(message.payload)} from topic: $topic")
+
+                    printConsole("Receive message: ${String(message.payload)}")
+
+                    when(topic){
+                        "tst2/esp32" -> Log.d(TAG, "       Something happens here!!: $topic")
+                        else -> Log.d(TAG, "Unhandled topic: $topic")
+                    }
+                }.start()
 
             }
 
@@ -66,40 +105,35 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
                 Log.d(TAG, "        Message delivered successfully!!")
 
+
             }
+
 
         })
 
+    }
 
-        val options = MqttConnectOptions()
-
-        options.password = "10203045".toCharArray()
-        options.userName = "hpterm-client-94:B9:7E:17:A3:00"
-        options.connectionTimeout = 40
-
+    fun subscribe(topic: String, qos: Int = 1){
         try {
-            mqttClient.connect(options, null, object : IMqttActionListener{
-                override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    Log.d(TAG, "Connection success")
-                    printConsole("Connection success")
-                }
-
+            mqttClient.subscribe(topic, qos, null,object : IMqttActionListener{
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                    Log.d(TAG, "Connection failure", exception)
-                    printConsole("Connection failure")
+                    Log.d(TAG, "Failed to subscribe $topic")
                 }
 
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.d(TAG, "Subscribed to $topic")
+                }
             })
-        }catch (e : MqttException){
+        }catch ( e : MqttException){
             e.printStackTrace()
-            Log.d(TAG, "Connection error!!!", e)
-
+            Log.d(TAG, "subscribe error!!!", e)
         }
-
-
     }
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
+
+        subscribe(topic,1)
+
         try {
             val message = MqttMessage()
             message.payload = msg.toByteArray()
@@ -118,6 +152,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             })
         } catch (e: MqttException) {
             e.printStackTrace()
+            Log.d(TAG, "Publish error!!!", e)
         }
     }
 
@@ -168,7 +203,9 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay1.setOnClickListener {
             Log.i(TAG, "Relay 1 connect command clicked!!!!")
 
-            publish("tst/esp32", "101")
+            if(mqttClient.isConnected){Log.i(TAG, "Mqtt connected!!!!")}
+
+            publish("tst2/esp32", "101")
 
         }
 
@@ -177,14 +214,14 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Relay 1 close command clicked!!!!")
 
-            publish("tst/esp32", "100")
+            publish("tst2/esp32", "100")
         }
 
         val openRelay2 = findViewById<Button>(R.id.OpenRelay2)
         openRelay2.setOnClickListener {
             Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst/esp32", "501")
+            publish("tst2/esp32", "501")
 
         }
 
@@ -193,7 +230,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst/esp32", "500")
+            publish("tst2/esp32", "500")
 
         }
 
