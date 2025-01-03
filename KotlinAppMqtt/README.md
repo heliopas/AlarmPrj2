@@ -27,6 +27,7 @@ Interface para acionamento para alarme usando Mqtt
 - 23/12/2024 - Função connect funcionando.Iniciando debug função callback
 - 24/12/2024 - Adicionado lógica para imprimir texto terminal console app, função callback em debug
 - 02/01/2025 - Função receive message já recebe valores, faltava implementação da função subscribe
+- 03/01/2025 - Ajustes para debug na interface logcat
 
 * Alterar função connect para somente fazer conexão
 * Esperar conexão retornar sucesso para acionar função subscribe

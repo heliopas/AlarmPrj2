@@ -86,9 +86,9 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             override fun messageArrived(topic: String, message: MqttMessage) {
                 Thread{
-                    Log.d(TAG, "Receive message: ${String(message.payload)} from topic: $topic")
+                    Log.d(TAG, "Received message: ${String(message.payload)} from topic: $topic")
 
-                    printConsole("Receive message: ${String(message.payload)}")
+                    printConsole("Received message: ${String(message.payload)}")
 
                     when(topic){
                         "tst2/esp32" -> Log.d(TAG, "       Something happens here!!: $topic")
@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
     }
 
     fun subscribe(topic: String, qos: Int = 1){
+
         try {
             mqttClient.subscribe(topic, qos, null,object : IMqttActionListener{
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -128,9 +129,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             e.printStackTrace()
             Log.d(TAG, "subscribe error!!!", e)
         }
+
+
     }
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
+
 
         subscribe(topic,1)
 
@@ -203,8 +207,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay1.setOnClickListener {
             Log.i(TAG, "Relay 1 connect command clicked!!!!")
 
-            if(mqttClient.isConnected){Log.i(TAG, "Mqtt connected!!!!")}
-
             publish("tst2/esp32", "101")
 
         }
@@ -221,7 +223,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay2.setOnClickListener {
             Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "501")
+            publish("tst2/esp32", "401")
 
         }
 
@@ -230,7 +232,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst2/esp32", "500")
+            publish("tst2/esp32", "400")
 
         }
 
