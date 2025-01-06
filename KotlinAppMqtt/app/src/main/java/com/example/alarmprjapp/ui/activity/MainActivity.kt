@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay2.setOnClickListener {
             Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "401")
+            publish("tst2/esp32", "201")
 
         }
 
@@ -232,7 +232,58 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             Log.i(TAG, "Buzzer off command clicked!!!!")
 
+            publish("tst2/esp32", "200")
+
+        }
+
+        val openRelay3 = findViewById<Button>(R.id.OpenRelay3)
+        openRelay3.setOnClickListener {
+            Log.i(TAG, "Buzzer on command clicked!!!!")
+
+            publish("tst2/esp32", "301")
+
+        }
+
+        val closeRelay3 = findViewById<Button>(R.id.CloseRelay3)
+        closeRelay3.setOnClickListener {
+
+            Log.i(TAG, "Buzzer off command clicked!!!!")
+
+            publish("tst2/esp32", "300")
+
+        }
+
+        val openRelay4 = findViewById<Button>(R.id.OpenRelay4)
+        openRelay4.setOnClickListener {
+            Log.i(TAG, "Buzzer on command clicked!!!!")
+
+            publish("tst2/esp32", "401")
+
+        }
+
+        val closeRelay4 = findViewById<Button>(R.id.CloseRelay4)
+        closeRelay4.setOnClickListener {
+
+            Log.i(TAG, "Buzzer off command clicked!!!!")
+
             publish("tst2/esp32", "400")
+
+        }
+
+        val buzzon = findViewById<Button>(R.id.BuzzOn)
+        buzzon.setOnClickListener {
+            Log.i(TAG, "Buzzer on command clicked!!!!")
+
+            publish("tst2/esp32", "501")
+
+        }
+
+        val buzzoff = findViewById<Button>(R.id.BuzzOff)
+        buzzoff.setOnClickListener {
+
+            Log.i(TAG, "Buzzer off command clicked!!!!")
+
+            publish("tst2/esp32", "500")
 
         }
 
