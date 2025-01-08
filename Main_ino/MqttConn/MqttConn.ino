@@ -9,11 +9,12 @@ const char* password = WIFI_PASSWD;
 const char* mqtt_Broker = MQTT_Broker;
 const char* mqtt_user = MQTT_USER;
 const char* mqtt_passwd = MQTT_PASSWD;
+char* action_response = NULL;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-const char *topic = "tst/esp32";
+const char *topic = "tst2/esp32";
 
 //Var global
 int ledPin = 2; 
@@ -24,6 +25,8 @@ int rele4 = 15;
 int buzzer = 0;
 
 unsigned long milliStart = millis();       
+
+unsigned long millisReboot = millis();
 
 
 void setup() {
@@ -111,7 +114,7 @@ void mqttConnect(){
         Serial.print("*");        
         mqtt_ClientID += String(WiFi.macAddress());
         Serial.printf("The client %s connects to the public MQTT broker\n", mqtt_ClientID.c_str());
-        if (client.connect(mqtt_ClientID.c_str(), mqtt_user, mqtt_passwd)) {
+        if (client.connect(mqtt_ClientID.c_str(), mqtt_user, mqtt_passwd )) {
             Serial.println("Public EMQX MQTT broker connected");
         } else {
             Serial.print("failed with state ");
@@ -138,45 +141,56 @@ void callback(char *topic, byte *payload, unsigned int length) {
     {
       Serial.println("Set relay 1 to HIGH");
       digitalWrite(rele1, HIGH);
-    }if(input == "100")
+      action_response = "10106";
+    }
+    if(input == "100")
     {
       Serial.println("Set relay 1 to LOW");
       digitalWrite(rele1, LOW);
+      action_response = "10006";
     }if(input == "201")
     {
       Serial.println("Set relay 2 to HIGH");
       digitalWrite(rele2, HIGH);
+      action_response = "20106";
     }if(input == "200")
     {
       Serial.println("Set relay 2 to LOW");
       digitalWrite(rele2, LOW);
+      action_response = "20006";
     }if(input == "301")
     {
       Serial.println("Set relay 3 to HIGH");
       digitalWrite(rele3, HIGH);
+      action_response = "30106";
     }if(input == "300")
     {
       Serial.println("Set relay 3 to LOW");
       digitalWrite(rele3, LOW);
+      action_response = "30006";
     }if(input == "401")
     {
       Serial.println("Set relay 4 to HIGH");
       digitalWrite(rele4, HIGH);
+      action_response = "40106";
     }if(input == "400")
     {
       Serial.println("Set relay 4 to LOW");
       digitalWrite(rele4, LOW);
+      action_response = "40006";
     }if(input == "501")
     {
       Serial.println("Set buzzer HIGH");
       digitalWrite(buzzer, HIGH);
+      action_response = "50106";
     }if(input == "500")
     {
       Serial.println("Set buzzer to LOW");
       digitalWrite(buzzer, LOW);
+      action_response = "50106";
     }
 
-client.disconnect();
+//client.disconnect(); #Desabilitado para melhorar performance da conexão
     
 }
 
@@ -192,8 +206,21 @@ client.loop();
 
 client.subscribe(topic);
 
-if((millis() - milliStart)>20000){client.publish(topic, "Working!!!!!"); milliStart = millis();}
+//Return function after apply requested changes
+if((millis() - milliStart)>=1000){
+  if(action_response != NULL){
+    client.publish(topic, action_response); 
+    action_response = NULL;
+  }  
+  milliStart = millis();
+  }
 
-//blinkLed(500, 0);
+//Safety reboot task
+if((millis() - millisReboot)>=3600000){
+  client.publish(topic, "System safety reboot!!!!!");
+  client.disconnect();
+  WiFi.disconnect();
+  millisReboot = millis();
+  }
 
 }
