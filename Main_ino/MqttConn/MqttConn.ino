@@ -137,6 +137,8 @@ void callback(char *topic, byte *payload, unsigned int length) {
     Serial.println();
     Serial.println("-----------------------");
 
+    action_response = NULL;
+
     if(input == "101")
     {
       Serial.println("Set relay 1 to HIGH");
@@ -207,13 +209,18 @@ client.loop();
 client.subscribe(topic);
 
 //Return function after apply requested changes
-if((millis() - milliStart)>=1000){
+/*if((millis() - milliStart)>=1000){
   if(action_response != NULL){
     client.publish(topic, action_response); 
     action_response = NULL;
   }  
   milliStart = millis();
-  }
+  }*/
+
+  if(action_response != NULL){
+    client.publish(topic, action_response); 
+    action_response = NULL;
+  }  
 
 //Safety reboot task
 if((millis() - millisReboot)>=3600000){

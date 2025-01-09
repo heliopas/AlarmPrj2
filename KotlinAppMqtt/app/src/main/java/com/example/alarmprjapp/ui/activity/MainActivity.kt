@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         mqttClient.setCallback(object : MqttCallback {
 
             override fun messageArrived(topic: String, message: MqttMessage) {
-                Thread{
+                //Thread{
                     Log.d(TAG, "Received message: ${String(message.payload)} from topic: $topic")
 
                     printConsole("Received message: ${String(message.payload)}")
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
                         "tst2/esp32" -> Log.d(TAG, "       Something happens here!!: $topic")
                         else -> Log.d(TAG, "Unhandled topic: $topic")
                     }
-                }.start()
+                //}.start()
 
             }
 
@@ -187,7 +187,11 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
     fun printConsole( topic: String ){
 
         val console = findViewById<EditText>(R.id.terminal)
-        console.setText(topic)
+        console.append("\n"+topic)
+
+        if (console.lineCount > 15) {
+            console.setText("")
+        }
 
     }
 
@@ -198,92 +202,137 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         val mqttConnect = findViewById<Button>(R.id.MqttConnect)
         mqttConnect.setOnClickListener {
-            Log.i(TAG, "Mqtt connect pressed!!!!")
-            connect(context = this)
+
+            try {
+
+                    Log.i(TAG, "Mqtt connect pressed!!!!")
+                    connect(context = this)
+
+
+            }catch (e : MqttException){
+                e.printStackTrace()
+                Log.d(TAG, "Disconnection error!!!", e)
+            }
 
         }
 
         val openRelay1 = findViewById<Button>(R.id.OpenRelay1)
         openRelay1.setOnClickListener {
+
+            if (mqttClient.isConnected){
             Log.i(TAG, "Relay 1 connect command clicked!!!!")
 
             publish("tst2/esp32", "101")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay1 = findViewById<Button>(R.id.CloseRelay1)
         closeRelay1.setOnClickListener {
 
-            Log.i(TAG, "Relay 1 close command clicked!!!!")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Relay 1 close command clicked!!!!")
 
-            publish("tst2/esp32", "100")
+                publish("tst2/esp32", "100")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
+
         }
 
         val openRelay2 = findViewById<Button>(R.id.OpenRelay2)
         openRelay2.setOnClickListener {
-            Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "201")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer on command clicked!!!!")
+
+                publish("tst2/esp32", "201")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay2 = findViewById<Button>(R.id.CloseRelay2)
         closeRelay2.setOnClickListener {
 
-            Log.i(TAG, "Buzzer off command clicked!!!!")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst2/esp32", "200")
+                publish("tst2/esp32", "200")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val openRelay3 = findViewById<Button>(R.id.OpenRelay3)
         openRelay3.setOnClickListener {
-            Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "301")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer on command clicked!!!!")
+
+                publish("tst2/esp32", "301")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay3 = findViewById<Button>(R.id.CloseRelay3)
         closeRelay3.setOnClickListener {
 
-            Log.i(TAG, "Buzzer off command clicked!!!!")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst2/esp32", "300")
+                publish("tst2/esp32", "300")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val openRelay4 = findViewById<Button>(R.id.OpenRelay4)
         openRelay4.setOnClickListener {
-            Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "401")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer on command clicked!!!!")
+
+                publish("tst2/esp32", "401")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay4 = findViewById<Button>(R.id.CloseRelay4)
         closeRelay4.setOnClickListener {
 
-            Log.i(TAG, "Buzzer off command clicked!!!!")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst2/esp32", "400")
+                publish("tst2/esp32", "400")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val buzzon = findViewById<Button>(R.id.BuzzOn)
         buzzon.setOnClickListener {
-            Log.i(TAG, "Buzzer on command clicked!!!!")
 
-            publish("tst2/esp32", "501")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer on command clicked!!!!")
+
+                publish("tst2/esp32", "501")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val buzzoff = findViewById<Button>(R.id.BuzzOff)
         buzzoff.setOnClickListener {
 
-            Log.i(TAG, "Buzzer off command clicked!!!!")
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer off command clicked!!!!")
 
-            publish("tst2/esp32", "500")
+                publish("tst2/esp32", "500")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
@@ -293,11 +342,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             Log.i(TAG, "Client disconnected!!!!")
             disconnect()
         }
-
-
-
-
-
 
     }
 

@@ -29,9 +29,10 @@ Interface para acionamento para alarme usando Mqtt
 - 02/01/2025 - Função receive message já recebe valores, faltava implementação da função subscribe
 - 03/01/2025 - Ajustes para debug na interface logcat
 - 03/01/2025 - Alterado layout app
+- 08/01/2025 - Corrigido bug que fechava aplicativo (varias threads sendo criadas ao enviar comandos)
 
-* Alterar função connect para somente fazer conexão
-* Esperar conexão retornar sucesso para acionar função subscribe
+
+
 * implementar retry de função para acionar funções da esp
 
 ## Exemplos
