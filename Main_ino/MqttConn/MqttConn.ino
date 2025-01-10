@@ -23,11 +23,13 @@ int rele2 = 12;
 int rele3 = 13;
 int rele4 = 15;
 int buzzer = 0;
+int micsPin = 34;
 
 unsigned long milliStart = millis();       
 
 unsigned long millisReboot = millis();
 
+unsigned long micsSensorRead = millis();     
 
 void setup() {
 
@@ -38,6 +40,10 @@ void setup() {
   pinMode(rele4, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(ledPin, OUTPUT);
+
+  // setpin IO34 as a input
+  pinMode(micsPin, INPUT);
+
   
     digitalWrite(rele1, LOW);
     digitalWrite(rele2, LOW);
@@ -87,6 +93,14 @@ void WifiConnect()
   Serial.print(WiFi.localIP());
   Serial.println("/");
 }
+
+int readMicsSensor()
+{
+  int sensorValue = analogRead(micsPin);
+  float voltage = sensorValue * (5.0 / 1023.0);
+  return sensorValue;
+}
+
 
 void blinkLed(int time, int blinkTime)
 {
@@ -190,6 +204,17 @@ void callback(char *topic, byte *payload, unsigned int length) {
       Serial.println("Set buzzer to LOW");
       digitalWrite(buzzer, LOW);
       action_response = "50106";
+    }if(input == "mics1")
+    {
+      Serial.println();
+      Serial.println("-----------------------");
+      Serial.println("Sensor value: ");
+      Serial.println(readMicsSensor());
+      Serial.println("-----------------------");
+      Serial.println();
+
+      //Send MICs sensor value in action_reponse
+      
     }
 
 //client.disconnect(); #Desabilitado para melhorar performance da conexão
@@ -217,10 +242,20 @@ client.subscribe(topic);
   milliStart = millis();
   }*/
 
-  if(action_response != NULL){
+/*if((millis() - micsSensorRead)>=1000){
+  Serial.println();
+  Serial.println("-----------------------");
+  Serial.println("Sensor value: ");
+  Serial.println(readMicsSensor());
+  Serial.println("-----------------------");
+  Serial.println();
+  micsSensorRead = millis();
+}*/
+
+if(action_response != NULL){
     client.publish(topic, action_response); 
     action_response = NULL;
-  }  
+}  
 
 //Safety reboot task
 if((millis() - millisReboot)>=3600000){
