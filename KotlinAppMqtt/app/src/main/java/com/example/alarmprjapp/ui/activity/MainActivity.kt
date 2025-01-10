@@ -21,7 +21,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         const val TAG = "AndroidMqttClient"
     }
 
-    fun connect(context: Context){
+    fun connect(topic: String, context: Context){
 
         //val serverMqtt = "broker.emqx.io"
 
@@ -67,6 +66,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
                     Log.d(TAG, "Connection success")
                     printConsole("Connection success")
 
+                    subscribe(topic, 1)
 
                 }
 
@@ -135,9 +135,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
 
-
-        subscribe(topic,1)
-
         try {
             val message = MqttMessage()
             message.payload = msg.toByteArray()
@@ -163,7 +160,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
     fun disconnect() {
 
         try {
-
             mqttClient.disconnect(null, object : IMqttActionListener{
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.d(TAG, "Client disconnection success!!")
@@ -184,13 +180,17 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
     }
 
-    fun printConsole( topic: String ){
+    fun printConsole( topic: String, opt: Int = 0){
 
         val console = findViewById<EditText>(R.id.terminal)
         console.append("\n"+topic)
 
         if (console.lineCount > 15) {
             console.setText("")
+        }
+
+        when (opt){
+            1 -> console.setText("")
         }
 
     }
@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
             try {
 
                     Log.i(TAG, "Mqtt connect pressed!!!!")
-                    connect(context = this)
+                    connect("tst2/esp32",context = this)
 
 
             }catch (e : MqttException){

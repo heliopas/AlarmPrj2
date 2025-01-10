@@ -30,6 +30,10 @@ Interface para acionamento para alarme usando Mqtt
 - 03/01/2025 - Ajustes para debug na interface logcat
 - 03/01/2025 - Alterado layout app
 - 08/01/2025 - Corrigido bug que fechava aplicativo (varias threads sendo criadas ao enviar comandos)
+- 10/01/2025 - Alterado chamada função subscribe para quando APP for conectado ao MQtt.
+               Adicionado botão de leitura de sensores
+               Alterado função printConsole para receber parametros para modificação
+               Adicionado classe connection
 
 
 
