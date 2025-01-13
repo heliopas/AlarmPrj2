@@ -324,6 +324,20 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         }
 
+        val readSensors = findViewById<Button>(R.id.ReadSensors)
+        readSensors.setOnClickListener {
+
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Read sensors button clicked!!!!")
+
+                publish("tst2/esp32", "601")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
+
+        }
+
+
+
         val buzzoff = findViewById<Button>(R.id.BuzzOff)
         buzzoff.setOnClickListener {
 

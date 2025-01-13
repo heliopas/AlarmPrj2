@@ -3,6 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <time.h>
 #include "config.h"
+#include <Wire.h>
 
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWD;
@@ -31,6 +32,47 @@ unsigned long millisReboot = millis();
 
 unsigned long micsSensorRead = millis();     
 
+// BMP280
+/*******************************/
+float temperature_BMP280;
+float pressure;
+
+//AHT20
+/*******************************/
+float temperature_AHT20;
+float humidity;
+bool sensor_started = false;
+bool sensor_busy = false;
+unsigned long measurementDelayAHT20 = 0;
+/*******************************/
+
+float delta = 0;
+float minDelta = 10;
+float maxDelta = 0;
+
+//  Heartbeat
+unsigned long HeartbeatMillis = 0;
+const long Heartbeatinterval = 5000;
+
+// Temperature variable
+int32_t _t_fine;
+
+// Trimming parameters
+uint16_t _dig_T1;
+int16_t _dig_T2;
+int16_t _dig_T3;
+
+uint16_t _dig_P1;
+int16_t _dig_P2;
+int16_t _dig_P3;
+int16_t _dig_P4;
+int16_t _dig_P5;
+int16_t _dig_P6;
+int16_t _dig_P7;
+int16_t _dig_P8;
+int16_t _dig_P9;
+/*******************************/
+
 void setup() {
 
   // Set D0 - D3 as OUTPUT
@@ -57,6 +99,12 @@ void setup() {
 
   WifiConnect();
   mqttConnect();
+
+  // Start AHT20 and BMP280 communication
+  Wire.begin();
+  AHT20_begin();
+  BMP280_begin();
+  startMeasurementAHT20();
   
 }
 
@@ -215,6 +263,9 @@ void callback(char *topic, byte *payload, unsigned int length) {
 
       //Send MICs sensor value in action_reponse
       
+    }if(input == "601")
+    {
+      action_response = "60106";
     }
 
 //client.disconnect(); #Desabilitado para melhorar performance da conexão
@@ -232,6 +283,9 @@ if(!client.connected())
 client.loop();
 
 client.subscribe(topic);
+
+checkbusyAHT20();
+getDataAHT20();
 
 //Return function after apply requested changes
 /*if((millis() - milliStart)>=1000){
@@ -263,6 +317,60 @@ if((millis() - millisReboot)>=3600000){
   client.disconnect();
   WiFi.disconnect();
   millisReboot = millis();
+  }
+
+unsigned long currentMillis = millis();
+  if (currentMillis - HeartbeatMillis >= Heartbeatinterval) {
+    HeartbeatMillis = currentMillis;
+
+    char buffer[20];
+
+    //BMP280
+    readTemperatureBMP280();
+    Serial.print("Temperatur bmp280: ");
+    Serial.print(temperature_BMP280);
+    if(action_response = "60106")client.publish(topic, dtostrf(temperature_BMP280, 7, 2, buffer));
+    Serial.println(" C");
+
+    readPressureBMP280();
+    Serial.print("Druck bmp280: ");
+    Serial.print(pressure);
+    if(action_response = "60106")client.publish(topic, dtostrf(pressure, 7, 2, buffer));
+    Serial.println(" hPa");
+
+
+    // AHT20
+    startMeasurementAHT20();
+
+    Serial.print("Humidity aht20: ");
+    Serial.print(humidity);
+    if(action_response = "60106")client.publish(topic, dtostrf(humidity, 7, 2, buffer));
+    Serial.println(" %");
+
+    Serial.print("Temperature aht20: ");
+    Serial.print(temperature_AHT20);
+    if(action_response = "60106")client.publish(topic, dtostrf(temperature_AHT20, 7, 2, buffer));
+    Serial.println(" C");
+
+
+    
+    // Calculate the delta between the temperature values AHT20 and BMP280
+    delta = (temperature_BMP280 > temperature_AHT20) ? (temperature_BMP280 - temperature_AHT20) : (temperature_AHT20 - temperature_BMP280);
+
+    if (delta < minDelta) {
+      minDelta = delta;
+    }
+    if (delta > maxDelta) {
+      maxDelta = delta;
+    }
+    Serial.print("Temperatur Delta : ");
+    Serial.print(delta);
+    Serial.print(" | Min Delta: ");
+    Serial.print(minDelta);
+    Serial.print(" | Max Delta: ");
+    Serial.println(maxDelta);
+
+    action_response = "";
   }
 
 }
