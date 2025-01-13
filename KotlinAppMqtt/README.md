@@ -34,6 +34,8 @@ Interface para acionamento para alarme usando Mqtt
                Adicionado botão de leitura de sensores
                Alterado função printConsole para receber parametros para modificação
                Adicionado classe connection
+- 13/01/2025 - corrigido logcat para abertura e fechamento de relés
+               Alterado ordem das funções igual a interface
 
 
 

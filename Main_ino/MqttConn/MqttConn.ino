@@ -32,46 +32,12 @@ unsigned long millisReboot = millis();
 
 unsigned long micsSensorRead = millis();     
 
-// BMP280
-/*******************************/
-float temperature_BMP280;
-float pressure;
-
-//AHT20
-/*******************************/
-float temperature_AHT20;
-float humidity;
-bool sensor_started = false;
-bool sensor_busy = false;
-unsigned long measurementDelayAHT20 = 0;
-/*******************************/
-
-float delta = 0;
-float minDelta = 10;
-float maxDelta = 0;
-
 //  Heartbeat
 unsigned long HeartbeatMillis = 0;
 const long Heartbeatinterval = 5000;
 
-// Temperature variable
-int32_t _t_fine;
-
-// Trimming parameters
-uint16_t _dig_T1;
-int16_t _dig_T2;
-int16_t _dig_T3;
-
-uint16_t _dig_P1;
-int16_t _dig_P2;
-int16_t _dig_P3;
-int16_t _dig_P4;
-int16_t _dig_P5;
-int16_t _dig_P6;
-int16_t _dig_P7;
-int16_t _dig_P8;
-int16_t _dig_P9;
-/*******************************/
+Adafruit_AHTX0 aht;  //Libmanager Adafruit AHT10  / Libmanager Adafruit AHTX0
+Adafruit_BMP280 bmp; //Libmanager Adafruit BMP280
 
 void setup() {
 
@@ -100,11 +66,22 @@ void setup() {
   WifiConnect();
   mqttConnect();
 
-  // Start AHT20 and BMP280 communication
-  Wire.begin();
-  AHT20_begin();
-  BMP280_begin();
-  startMeasurementAHT20();
+  if (! aht.begin()) {
+    Serial.println("Could not find AHT? Check wiring");
+    while (1) delay(10);
+  }
+  Serial.println("AHT10 or AHT20 found");
+
+  
+  if (!bmp.begin(0x77)) { /*Definindo o endereço I2C como 0x76. Mudar, se necessário, para (0x77)*/
+    
+    //Imprime mensagem de erro no caso de endereço invalido ou não localizado. Modifique o valor 
+    Serial.println(F(" Não foi possível encontrar um sensor BMP280 válido, verifique a fiação ou "
+                      "tente outro endereço!"));
+     while (1) delay(10);
+  
+  }
+
   
 }
 
@@ -324,53 +301,36 @@ unsigned long currentMillis = millis();
     HeartbeatMillis = currentMillis;
 
     char buffer[20];
-
-    //BMP280
-    readTemperatureBMP280();
-    Serial.print("Temperatur bmp280: ");
-    Serial.print(temperature_BMP280);
-    if(action_response = "60106")client.publish(topic, dtostrf(temperature_BMP280, 7, 2, buffer));
-    Serial.println(" C");
-
-    readPressureBMP280();
-    Serial.print("Druck bmp280: ");
-    Serial.print(pressure);
-    if(action_response = "60106")client.publish(topic, dtostrf(pressure, 7, 2, buffer));
-    Serial.println(" hPa");
+	//if(action_response = "60106")client.publish(topic, dtostrf(temperature_AHT20, 7, 2, buffer));
 
 
-    // AHT20
-    startMeasurementAHT20();
-
-    Serial.print("Humidity aht20: ");
-    Serial.print(humidity);
-    if(action_response = "60106")client.publish(topic, dtostrf(humidity, 7, 2, buffer));
-    Serial.println(" %");
-
-    Serial.print("Temperature aht20: ");
-    Serial.print(temperature_AHT20);
-    if(action_response = "60106")client.publish(topic, dtostrf(temperature_AHT20, 7, 2, buffer));
-    Serial.println(" C");
-
+    sensors_event_t humidity, temp;
 
     
-    // Calculate the delta between the temperature values AHT20 and BMP280
-    delta = (temperature_BMP280 > temperature_AHT20) ? (temperature_BMP280 - temperature_AHT20) : (temperature_AHT20 - temperature_BMP280);
+    //Imprimindo os valores de Temperatura
+    Serial.print(F("Temperatura = "));
+    Serial.print(bmp.readTemperature());
+    Serial.println(" *C");
+    //Imprimindo os valores de Pressão
+    Serial.print(F("Pressão = "));
+    Serial.print(bmp.readPressure());
+    Serial.println(" Pa");
+    //Imprimindo os valores de Altitude Aproximada
+    Serial.print(F("Altitude Aprox = "));
+    Serial.print(bmp.readAltitude(1013.25)); 
+    Serial.println(" m");
+    
 
-    if (delta < minDelta) {
-      minDelta = delta;
-    }
-    if (delta > maxDelta) {
-      maxDelta = delta;
-    }
-    Serial.print("Temperatur Delta : ");
-    Serial.print(delta);
-    Serial.print(" | Min Delta: ");
-    Serial.print(minDelta);
-    Serial.print(" | Max Delta: ");
-    Serial.println(maxDelta);
 
-    action_response = "";
+    aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
+    Serial.print("Temperature: "); Serial.print(temp.temperature); Serial.println(" degrees C");
+    Serial.print("Humidity: "); Serial.print(humidity.relative_humidity); Serial.println("% rH");	
+	
   }
 
 }
+
+
+//https://blog.eletrogate.com/como-utilizar-o-sensor-bmp280-com-arduino/
+//https://learn.adafruit.com/adafruit-aht20?view=all
+//https://www.electronicshub.org/esp32-pinout/

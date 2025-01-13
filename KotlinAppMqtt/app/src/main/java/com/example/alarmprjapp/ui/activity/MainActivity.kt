@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay2.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer on command clicked!!!!")
+                Log.i(TAG, "Relay 2 connect command clicked!!!!")
 
                 publish("tst2/esp32", "201")
             }
@@ -256,7 +256,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         closeRelay2.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer off command clicked!!!!")
+                Log.i(TAG, "Relay 2 close command clicked!!!!")
 
                 publish("tst2/esp32", "200")
             }
@@ -268,7 +268,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay3.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer on command clicked!!!!")
+                Log.i(TAG, "Relay 3 connect command clicked!!!!")
 
                 publish("tst2/esp32", "301")
             }
@@ -280,7 +280,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         closeRelay3.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer off command clicked!!!!")
+                Log.i(TAG, "Relay 3 close command clicked!!!!")
 
                 publish("tst2/esp32", "300")
             }
@@ -292,7 +292,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay4.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer on command clicked!!!!")
+                Log.i(TAG, "Relay 4 connect command clicked!!!!")
 
                 publish("tst2/esp32", "401")
             }
@@ -304,7 +304,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         closeRelay4.setOnClickListener {
 
             if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer off command clicked!!!!")
+                Log.i(TAG, "Relay 4 close command clicked!!!!")
 
                 publish("tst2/esp32", "400")
             }
@@ -324,6 +324,18 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         }
 
+        val buzzoff = findViewById<Button>(R.id.BuzzOff)
+        buzzoff.setOnClickListener {
+
+            if (mqttClient.isConnected){
+                Log.i(TAG, "Buzzer off command clicked!!!!")
+
+                publish("tst2/esp32", "500")
+            }
+            else{printConsole("Mqtt não conectado!!!!")}
+
+        }
+
         val readSensors = findViewById<Button>(R.id.ReadSensors)
         readSensors.setOnClickListener {
 
@@ -336,19 +348,6 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
         }
 
-
-
-        val buzzoff = findViewById<Button>(R.id.BuzzOff)
-        buzzoff.setOnClickListener {
-
-            if (mqttClient.isConnected){
-                Log.i(TAG, "Buzzer off command clicked!!!!")
-
-                publish("tst2/esp32", "500")
-            }
-            else{printConsole("Mqtt não conectado!!!!")}
-
-        }
 
         val mqttClose = findViewById<Button>(R.id.MqttDisconnect)
         mqttClose.setOnClickListener {

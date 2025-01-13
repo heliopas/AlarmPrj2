@@ -4,3 +4,4 @@
          - Removido função client.disconnect(); para ser chamada a cada request 'melhora performance'
 08/01/25 - Removido função para realizar leitura da variavel de retorno action_response
 10/01/25 - Adicionado função para ler valores do sensor MICs5524
+13/01/25 - Alterado biblioteca de leitura de sensores para Adafruit AHT e BMP
