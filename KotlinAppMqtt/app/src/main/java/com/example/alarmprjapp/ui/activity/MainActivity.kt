@@ -180,12 +180,12 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
     }
 
-    fun printConsole( topic: String, opt: Int = 0){
+    fun printConsole( topic: String = "", opt: Int = 0, clearOutput: Boolean = false){
 
         val console = findViewById<EditText>(R.id.terminal)
         console.append("\n"+topic)
 
-        if (console.lineCount > 15) {
+        if (console.lineCount > 15 || clearOutput) {
             console.setText("")
         }
 
@@ -353,12 +353,10 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         mqttClose.setOnClickListener {
 
             Log.i(TAG, "Client disconnected!!!!")
+            printConsole(clearOutput = true)
             disconnect()
         }
 
     }
-
-
-
 }
 

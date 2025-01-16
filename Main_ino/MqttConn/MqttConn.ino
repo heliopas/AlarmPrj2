@@ -4,13 +4,15 @@
 #include <time.h>
 #include "config.h"
 #include <Wire.h>
+#include <Adafruit_AHTX0.h>
+#include <Adafruit_BMP280.h>
 
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWD;
 const char* mqtt_Broker = MQTT_Broker;
 const char* mqtt_user = MQTT_USER;
 const char* mqtt_passwd = MQTT_PASSWD;
-char* action_response = NULL;
+char* action_response = (char*)malloc(10);;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -34,7 +36,7 @@ unsigned long micsSensorRead = millis();
 
 //  Heartbeat
 unsigned long HeartbeatMillis = 0;
-const long Heartbeatinterval = 5000;
+const long Heartbeatinterval = 1000;
 
 Adafruit_AHTX0 aht;  //Libmanager Adafruit AHT10  / Libmanager Adafruit AHTX0
 Adafruit_BMP280 bmp; //Libmanager Adafruit BMP280
@@ -65,7 +67,7 @@ void setup() {
 
   WifiConnect();
   mqttConnect();
-
+  
   if (! aht.begin()) {
     Serial.println("Could not find AHT? Check wiring");
     while (1) delay(10);
@@ -73,14 +75,12 @@ void setup() {
   Serial.println("AHT10 or AHT20 found");
 
   
-  if (!bmp.begin(0x77)) { /*Definindo o endereço I2C como 0x76. Mudar, se necessário, para (0x77)*/
-    
-    //Imprime mensagem de erro no caso de endereço invalido ou não localizado. Modifique o valor 
-    Serial.println(F(" Não foi possível encontrar um sensor BMP280 válido, verifique a fiação ou "
-                      "tente outro endereço!"));
-     while (1) delay(10);
-  
-  }
+  /*if (!bmp.begin(0x76)) {
+      
+      Serial.println(F("Device not ready!!!"));
+      Serial.println(bmp.sensorID(),16);
+      while (1) delay(10);
+  }*/
 
   
 }
@@ -130,8 +130,6 @@ int readMicsSensor()
 void blinkLed(int time, int blinkTime)
 {
 
-   //unsigned long milliStart = time * 1000;
-
    while(blinkTime>=0)
    {
       digitalWrite(ledPin, LOW);
@@ -176,59 +174,57 @@ void callback(char *topic, byte *payload, unsigned int length) {
     Serial.println();
     Serial.println("-----------------------");
 
-    action_response = NULL;
-
     if(input == "101")
     {
       Serial.println("Set relay 1 to HIGH");
       digitalWrite(rele1, HIGH);
-      action_response = "10106";
+      strcpy(action_response, "10106");
     }
     if(input == "100")
     {
       Serial.println("Set relay 1 to LOW");
       digitalWrite(rele1, LOW);
-      action_response = "10006";
+      strcpy(action_response, "10006");
     }if(input == "201")
     {
       Serial.println("Set relay 2 to HIGH");
       digitalWrite(rele2, HIGH);
-      action_response = "20106";
+      strcpy(action_response, "20106");
     }if(input == "200")
     {
       Serial.println("Set relay 2 to LOW");
       digitalWrite(rele2, LOW);
-      action_response = "20006";
+      strcpy(action_response, "20006");
     }if(input == "301")
     {
       Serial.println("Set relay 3 to HIGH");
       digitalWrite(rele3, HIGH);
-      action_response = "30106";
+      strcpy(action_response, "30106");
     }if(input == "300")
     {
       Serial.println("Set relay 3 to LOW");
       digitalWrite(rele3, LOW);
-      action_response = "30006";
+      strcpy(action_response, "30006");
     }if(input == "401")
     {
       Serial.println("Set relay 4 to HIGH");
       digitalWrite(rele4, HIGH);
-      action_response = "40106";
+      strcpy(action_response, "40106");
     }if(input == "400")
     {
       Serial.println("Set relay 4 to LOW");
       digitalWrite(rele4, LOW);
-      action_response = "40006";
+      strcpy(action_response, "40006");
     }if(input == "501")
     {
       Serial.println("Set buzzer HIGH");
       digitalWrite(buzzer, HIGH);
-      action_response = "50106";
+      strcpy(action_response, "50106");
     }if(input == "500")
     {
       Serial.println("Set buzzer to LOW");
       digitalWrite(buzzer, LOW);
-      action_response = "50106";
+      strcpy(action_response, "50006");
     }if(input == "mics1")
     {
       Serial.println();
@@ -242,7 +238,7 @@ void callback(char *topic, byte *payload, unsigned int length) {
       
     }if(input == "601")
     {
-      action_response = "60106";
+      strcpy(action_response, "60106");
     }
 
 //client.disconnect(); #Desabilitado para melhorar performance da conexão
@@ -259,10 +255,6 @@ if(!client.connected())
 
 client.loop();
 
-client.subscribe(topic);
-
-checkbusyAHT20();
-getDataAHT20();
 
 //Return function after apply requested changes
 /*if((millis() - milliStart)>=1000){
@@ -283,51 +275,35 @@ getDataAHT20();
   micsSensorRead = millis();
 }*/
 
-if(action_response != NULL){
+
+
+if(strcmp(action_response, "60106") == 0){
+    char buffer[10];
+
+    sensors_event_t humidity, temp;
+    client.subscribe(topic);
+
+    aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
+    //Serial.print("Temperature: "); Serial.print(temp.temperature); Serial.println(" degrees C");
+    client.publish(topic, dtostrf(temp.temperature, 7, 2, buffer));
+    //Serial.print("Humidity: "); Serial.print(humidity.relative_humidity); Serial.println("% rH");
+    client.publish(topic, dtostrf(humidity.relative_humidity, 7, 2, buffer));
+}
+
+
+if(strcmp(action_response, "00000") != 0){
+    client.subscribe(topic);
     client.publish(topic, action_response); 
-    action_response = NULL;
+    strcpy(action_response, "00000");
 }  
 
 //Safety reboot task
-if((millis() - millisReboot)>=3600000){
+/*if((millis() - millisReboot)>=3600000){
   client.publish(topic, "System safety reboot!!!!!");
   client.disconnect();
   WiFi.disconnect();
   millisReboot = millis();
-  }
-
-unsigned long currentMillis = millis();
-  if (currentMillis - HeartbeatMillis >= Heartbeatinterval) {
-    HeartbeatMillis = currentMillis;
-
-    char buffer[20];
-	//if(action_response = "60106")client.publish(topic, dtostrf(temperature_AHT20, 7, 2, buffer));
-
-
-    sensors_event_t humidity, temp;
-
-    
-    //Imprimindo os valores de Temperatura
-    Serial.print(F("Temperatura = "));
-    Serial.print(bmp.readTemperature());
-    Serial.println(" *C");
-    //Imprimindo os valores de Pressão
-    Serial.print(F("Pressão = "));
-    Serial.print(bmp.readPressure());
-    Serial.println(" Pa");
-    //Imprimindo os valores de Altitude Aproximada
-    Serial.print(F("Altitude Aprox = "));
-    Serial.print(bmp.readAltitude(1013.25)); 
-    Serial.println(" m");
-    
-
-
-    aht.getEvent(&humidity, &temp);// populate temp and humidity objects with fresh data
-    Serial.print("Temperature: "); Serial.print(temp.temperature); Serial.println(" degrees C");
-    Serial.print("Humidity: "); Serial.print(humidity.relative_humidity); Serial.println("% rH");	
-	
-  }
-
+  }*/
 }
 
 
