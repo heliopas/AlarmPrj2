@@ -1,6 +1,6 @@
 package com.example.alarmprjapp.ui.activity
 
-class connection {
+class connection (){
 
     var serverMqttHivemq: String = "tcp://broker.hivemq.com:1883"
         get() {
@@ -12,5 +12,25 @@ class connection {
             return field
         }
 
-
 }
+
+/*
+enum class connection (val connectionParam : String = ""){
+    /*
+        var serverMqttHivemq: String = "tcp://broker.hivemq.com:1883"
+            get() {
+                return field
+            }
+
+        var serverMqttEmqc = "tcp://broker.emqx.io:1883"
+            get() {
+                return field
+            }
+    */
+
+    serverMqttHivemq("tcp://broker.hivemq.com:1883"),
+    serverMqttEmqc("tcp://broker.emqx.io:1883"),
+    topicName("tst2/esp32")
+
+
+}*/
