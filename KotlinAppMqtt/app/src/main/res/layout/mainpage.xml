@@ -159,6 +159,16 @@
             app:layout_constraintStart_toStartOf="@id/MqttDisconnect"
             app:layout_constraintTop_toBottomOf="@id/MqttDisconnect"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:background="@color/black"
+            app:srcCompat="@drawable/ic_options"
+            tools:layout_editor_absoluteX="30dp"
+            tools:layout_editor_absoluteY="555dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
