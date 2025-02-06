@@ -36,6 +36,8 @@ Interface para acionamento para alarme usando Mqtt
                Adicionado classe connection
 - 13/01/2025 - corrigido logcat para abertura e fechamento de relés
                Alterado ordem das funções igual a interface
+- 05/02/2025 - Centralizado botão de configuração
+               Alterado cor dos botões para cinza
 
 
 

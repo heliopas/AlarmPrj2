@@ -220,9 +220,9 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         openRelay1.setOnClickListener {
 
             if (mqttClient.isConnected){
-            Log.i(TAG, "Relay 1 connect command clicked!!!!")
-
-            publish("tst2/esp32", "101")
+                Log.i(TAG, "Relay 1 connect command clicked!!!!")
+                printConsole(clearOutput = true)
+                publish("tst2/esp32", "101")
             }
             else{printConsole("Mqtt não conectado!!!!")}
 
@@ -233,7 +233,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 1 close command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "100")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 2 connect command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "201")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 2 close command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "200")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 3 connect command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "301")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -281,7 +281,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 3 close command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "300")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 4 connect command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "401")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -305,7 +305,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Relay 4 close command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "400")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Buzzer on command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "501")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -329,7 +329,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Buzzer off command clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "500")
             }
             else{printConsole("Mqtt não conectado!!!!")}
@@ -341,7 +341,7 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
             if (mqttClient.isConnected){
                 Log.i(TAG, "Read sensors button clicked!!!!")
-
+                printConsole(clearOutput = true)
                 publish("tst2/esp32", "601")
             }
             else{printConsole("Mqtt não conectado!!!!")}

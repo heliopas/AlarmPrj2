@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="MqttConnect"
+            android:backgroundTint="#898989"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
             android:text="OpenRelay1"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toStartOf="@id/MqttConnect"
             app:layout_constraintTop_toTopOf="@id/MqttConnect"
             app:layout_constraintVertical_bias="1" />
@@ -41,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="CloseRelay1"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toEndOf="@id/OpenRelay1"
             app:layout_constraintTop_toTopOf="@id/OpenRelay1"
             app:layout_constraintVertical_bias="1" />
@@ -51,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
             android:text="OpenRelay2"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toStartOf="@id/MqttConnect"
             app:layout_constraintTop_toTopOf="@id/OpenRelay1"
             app:layout_constraintVertical_bias="1" />
@@ -61,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="CloseRelay2"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toEndOf="@id/OpenRelay2"
             app:layout_constraintTop_toTopOf="@id/OpenRelay2"
             app:layout_constraintVertical_bias="1" />
@@ -71,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
             android:text="OpenRelay3"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toStartOf="@id/MqttConnect"
             app:layout_constraintTop_toTopOf="@id/OpenRelay2"
             app:layout_constraintVertical_bias="1" />
@@ -81,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="CloseRelay3"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toEndOf="@id/OpenRelay2"
             app:layout_constraintTop_toTopOf="@id/OpenRelay3"
             app:layout_constraintVertical_bias="1" />
@@ -91,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
             android:text="OpenRelay4"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toStartOf="@id/MqttConnect"
             app:layout_constraintTop_toTopOf="@id/OpenRelay3"
             app:layout_constraintVertical_bias="1" />
@@ -101,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="CloseRelay4"
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toEndOf="@id/OpenRelay2"
             app:layout_constraintTop_toTopOf="@id/OpenRelay4"
             app:layout_constraintVertical_bias="1" />
@@ -111,6 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
             android:text=" Buzzer_ON "
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toStartOf="@id/MqttConnect"
             app:layout_constraintTop_toTopOf="@id/OpenRelay4"
             app:layout_constraintVertical_bias="1" />
@@ -121,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text=" Buzzer_OFF "
+            android:backgroundTint="#898989"
             app:layout_constraintStart_toEndOf="@id/OpenRelay2"
             app:layout_constraintTop_toTopOf="@id/BuzzOn"
             app:layout_constraintVertical_bias="1" />
@@ -131,6 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="Read_Sensors"
+            android:backgroundTint="#898989"
             app:layout_constraintEnd_toEndOf="@id/BuzzOff"
             app:layout_constraintStart_toStartOf="@id/BuzzOff"
             app:layout_constraintTop_toBottomOf="@id/BuzzOff"
@@ -143,6 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="MQTTDISCONNECT"
+            android:backgroundTint="#898989"
             app:layout_constraintEnd_toEndOf="@id/ReadSensors"
             app:layout_constraintStart_toStartOf="@id/ReadSensors"
             app:layout_constraintTop_toBottomOf="@id/ReadSensors"
@@ -164,10 +177,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:background="@color/black"
+            android:backgroundTint="#898989"
             app:srcCompat="@drawable/ic_options"
             tools:layout_editor_absoluteX="30dp"
-            tools:layout_editor_absoluteY="555dp" />
+            tools:layout_editor_absoluteY="555dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
