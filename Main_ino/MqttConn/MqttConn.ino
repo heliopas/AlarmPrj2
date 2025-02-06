@@ -256,27 +256,6 @@ if(!client.connected())
 client.loop();
 
 
-//Return function after apply requested changes
-/*if((millis() - milliStart)>=1000){
-  if(action_response != NULL){
-    client.publish(topic, action_response); 
-    action_response = NULL;
-  }  
-  milliStart = millis();
-  }*/
-
-/*if((millis() - micsSensorRead)>=1000){
-  Serial.println();
-  Serial.println("-----------------------");
-  Serial.println("Sensor value: ");
-  Serial.println(readMicsSensor());
-  Serial.println("-----------------------");
-  Serial.println();
-  micsSensorRead = millis();
-}*/
-
-
-
 if(strcmp(action_response, "60106") == 0){
     char buffer[10];
 
@@ -297,14 +276,18 @@ if(strcmp(action_response, "00000") != 0){
     strcpy(action_response, "00000");
 }  
 
+
+//blinkLed(200, 1);
+
 //Safety reboot task
-/*if((millis() - millisReboot)>=3600000){
-  client.publish(topic, "System safety reboot!!!!!");
-  client.disconnect();
-  WiFi.disconnect();
-  millisReboot = millis();
-  }*/
+if((millis() - millisReboot)>=7200000){
+  Serial.println("Run reboot task!!!!");
+  ESP.restart();
 }
+
+}
+
+
 
 
 //https://blog.eletrogate.com/como-utilizar-o-sensor-bmp280-com-arduino/
