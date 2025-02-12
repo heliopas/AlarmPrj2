@@ -173,7 +173,7 @@
             app:layout_constraintTop_toBottomOf="@id/MqttDisconnect"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton4"
+            android:id="@+id/optionsbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"

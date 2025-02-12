@@ -38,6 +38,7 @@ Interface para acionamento para alarme usando Mqtt
                Alterado ordem das funções igual a interface
 - 05/02/2025 - Centralizado botão de configuração
                Alterado cor dos botões para cinza
+- 12/02/2025 - Criado lógica para tela de configuração e dropdown menu
 
 
 
