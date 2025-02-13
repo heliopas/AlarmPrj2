@@ -3,6 +3,7 @@ package com.example.alarmprjapp
 import android.adservices.topics.Topic
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.service.controls.actions.FloatAction
 import android.util.Log
@@ -25,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.alarmprjapp.ui.activity.OptionsForm
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.MqttClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -364,42 +366,8 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         option.setOnClickListener {
             Log.i(TAG, "Option button pressed!!!!")
 
-            setContentView(R.layout.configpage)
-
-
-            val servers = arrayOf("Select Mqtt server","broker.emqx.io", "broker.hivemq.com")
-            val mqttServer : Spinner = findViewById(R.id.Mqttservers)
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, servers)
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-            mqttServer.adapter = adapter
-
-            mqttServer.onItemSelectedListener = object : AdapterView.OnItemClickListener,
-                AdapterView.OnItemSelectedListener {
-                override fun onItemClick(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    Log.i(TAG, "Item selecionado "+parent?.getItemAtPosition(position).toString())
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("Not yet implemented")
-                }
-
-            }
+            val optionsPage = Intent(this, OptionsForm::class.java)
+            startActivity(optionsPage)
 
         }
 
