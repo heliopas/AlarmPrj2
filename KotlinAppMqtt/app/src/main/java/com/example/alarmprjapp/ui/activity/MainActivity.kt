@@ -38,6 +38,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import org.eclipse.paho.client.mqttv3.MqttTopic
+import java.lang.RuntimeException
 
 class MainActivity : AppCompatActivity(R.layout.mainpage) {
 
@@ -209,10 +210,8 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         mqttConnect.setOnClickListener {
 
             try {
-
                     Log.i(TAG, "Mqtt connect pressed!!!!")
                     connect("tst2/esp32",context = this)
-
 
             }catch (e : MqttException){
                 e.printStackTrace()
@@ -224,132 +223,155 @@ class MainActivity : AppCompatActivity(R.layout.mainpage) {
         val openRelay1 = findViewById<Button>(R.id.OpenRelay1)
         openRelay1.setOnClickListener {
 
-            if (mqttClient.isConnected){
-                Log.i(TAG, "Relay 1 connect command clicked!!!!")
-                printConsole(clearOutput = true)
-                publish("tst2/esp32", "101")
+            try {
+                    Log.i(TAG, "Relay 1 connect command clicked!!!!")
+                    printConsole(clearOutput = true)
+                    publish("tst2/esp32", "101")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
+
 
         }
 
         val closeRelay1 = findViewById<Button>(R.id.CloseRelay1)
         closeRelay1.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 1 close command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "100")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val openRelay2 = findViewById<Button>(R.id.OpenRelay2)
         openRelay2.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 2 connect command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "201")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay2 = findViewById<Button>(R.id.CloseRelay2)
         closeRelay2.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 2 close command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "200")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val openRelay3 = findViewById<Button>(R.id.OpenRelay3)
         openRelay3.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 3 connect command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "301")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay3 = findViewById<Button>(R.id.CloseRelay3)
         closeRelay3.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 3 close command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "300")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val openRelay4 = findViewById<Button>(R.id.OpenRelay4)
         openRelay4.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 4 connect command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "401")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val closeRelay4 = findViewById<Button>(R.id.CloseRelay4)
         closeRelay4.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Relay 4 close command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "400")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val buzzon = findViewById<Button>(R.id.BuzzOn)
         buzzon.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Buzzer on command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "501")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val buzzoff = findViewById<Button>(R.id.BuzzOff)
         buzzoff.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Buzzer off command clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "500")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 
         val readSensors = findViewById<Button>(R.id.ReadSensors)
         readSensors.setOnClickListener {
 
-            if (mqttClient.isConnected){
+            try {
                 Log.i(TAG, "Read sensors button clicked!!!!")
                 printConsole(clearOutput = true)
                 publish("tst2/esp32", "601")
+
+            }catch (e: RuntimeException){
+                printConsole("Mqtt não conectado!!!! "+ e.toString())
             }
-            else{printConsole("Mqtt não conectado!!!!")}
 
         }
 

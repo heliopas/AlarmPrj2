@@ -15,10 +15,6 @@ class OptionsForm : AppCompatActivity(R.layout.configpage) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-
     }
 
     override fun onResume() {
@@ -58,11 +54,10 @@ class OptionsForm : AppCompatActivity(R.layout.configpage) {
 
         }
 
-
         val salvarBtn = findViewById<Button>(R.id.Aplicarconfig)
         salvarBtn.setOnClickListener {
 
-            setContentView(R.layout.mainpage)
+            finish() //returns to MainActivity
 
         }
 

@@ -38,11 +38,11 @@ Interface para acionamento para alarme usando Mqtt
                Alterado ordem das funções igual a interface
 - 05/02/2025 - Centralizado botão de configuração
                Alterado cor dos botões para cinza
-- 12/02/2025 - Criado lógica para tela de configuração e dropdown menu
+- 12/02/2025 - Criado lógica para tela de configuração e dropdown menu, criado activity para menu
+               de configuração.
+- 13/02/2025 - Adicionado try/catch para tratar exception RuntimeException ao acessar função ser MQTT conectado
 
 
-
-* implementar retry de função para acionar funções da esp
 
 ## Exemplos
 
